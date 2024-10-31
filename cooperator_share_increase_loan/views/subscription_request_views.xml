@@ -1,0 +1,35 @@
+<odoo>
+    <record id="subscription_request_form_view_increase_loan" model="ir.ui.view">
+        <field name="name">subscription.request.form.increase.loan</field>
+        <field name="model">subscription.request</field>
+        <field name="inherit_id" ref="cooperator.subscription_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="attributes">
+                <attribute name="attrs">{'readonly': [('state', '!=', 'draft')]}</attribute>
+            </xpath>
+            <xpath expr="//page[@name='capital_release_request']" position="after">
+                <page name="loan_request" string="Loan request" attrs="{'invisible': [('type', '!=', 'increase')]}">
+                    <group>
+                        <group>
+                            <field name="loan_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="customize_loan"/>
+                        </group>
+                    </group>
+                    <group attrs="{'invisible': [('customize_loan', '=', False)]}">
+                        <group>
+                            <field name="loan_interest_rate" attrs="{'required': [('type', '=', 'increase')]}"/>
+                            <field name="loan_journal_id" attrs="{'required': [('customize_loan', '=', True), ('type', '=', 'increase')]}"/>
+                            <field name="long_term_loan_account_id" attrs="{'required': [('customize_loan', '=', True), ('type', '=', 'increase')]}"/>
+                        </group>
+                        <group>
+                            <field name="loan_min_periods" attrs="{'required': [('customize_loan', '=', True), ('type', '=', 'increase')]}"/>
+                            <field name="interest_expenses_account_id" attrs="{'required': [('customize_loan', '=', True), ('type', '=', 'increase')]}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
