@@ -8,7 +8,7 @@
                 <attribute name="attrs">{'readonly': [('state', '!=', 'draft')]}</attribute>
             </xpath>
             <xpath expr="//page[@name='capital_release_request']" position="after">
-                <page name="loan_request" string="Loan request" attrs="{'invisible': [('type', '!=', 'increase')]}">
+                <page name="loan_request" string="Loan request" attrs="{'invisible': [('type', '!=', 'increase_remunerated')]}">
                     <group>
                         <group>
                             <field name="loan_id" readonly="1"/>
@@ -19,13 +19,13 @@
                     </group>
                     <group attrs="{'invisible': [('customize_loan', '=', False)]}">
                         <group>
-                            <field name="loan_interest_rate" attrs="{'required': [('type', '=', 'increase')]}"/>
-                            <field name="loan_journal_id" attrs="{'required': [('customize_loan', '=', True), ('type', '=', 'increase')]}"/>
-                            <field name="long_term_loan_account_id" attrs="{'required': [('customize_loan', '=', True), ('type', '=', 'increase')]}"/>
+                            <field name="loan_interest_rate" attrs="{'required': [('type', '=', 'increase_remunerated')]}"/>
+                            <field name="loan_journal_id" attrs="{'required': [('customize_loan', '=', True), ('type', '=', 'increase_remunerated')]}"/>
+                            <field name="method_period" attrs="{'required': [('customize_loan', '=', True), ('type', '=', 'increase_remunerated')]}"/>
                         </group>
                         <group>
-                            <field name="loan_min_periods" attrs="{'required': [('customize_loan', '=', True), ('type', '=', 'increase')]}"/>
-                            <field name="interest_expenses_account_id" attrs="{'required': [('customize_loan', '=', True), ('type', '=', 'increase')]}"/>
+                            <field name="loan_min_periods" attrs="{'required': [('customize_loan', '=', True), ('type', '=', 'increase_remunerated')]}"/>
+                            <field name="interest_expenses_account_id" attrs="{'required': [('customize_loan', '=', True), ('type', '=', 'increase_remunerated')]}"/>
                         </group>
                     </group>
                 </page>

@@ -9,9 +9,8 @@
                 <group string="Loan Information">
                     <field name="loan_interest_rate"/>
                     <field name="loan_min_periods"/>
+                    <field name="method_period"/>
                     <field name="loan_journal_id"/>
-                    <field name="short_term_loan_account_id"/>
-                    <field name="long_term_loan_account_id"/>
                     <field name="interest_expenses_account_id"/>
                 </group>
             </xpath>

@@ -23,21 +23,23 @@ class ProductTemplate(models.Model):
     loan_min_periods = fields.Integer(
         string="Loan Periods", help="Minimum number of periods for the loan"
     )
-    short_term_loan_account_id = fields.Many2one(
-        "account.account",
-        string="Short term account",
-        help="Account that will contain the pending amount on short term",
-        domain="[('company_id', 'in', [current_company_id, False]), ('deprecated', '=', False)]",
-    )
-    long_term_loan_account_id = fields.Many2one(
-        "account.account",
-        string="Long term account",
-        help="Account that will contain the pending amount on Long term",
-        domain="[('company_id', 'in', [current_company_id, False]), ('deprecated', '=', False)]",
+    method_period = fields.Integer(
+        string="Period Length",
+        default=1,
+        help="State here the time between 2 depreciations, in months",
+        required=True,
+        readonly=True,
+        states={"draft": [("readonly", False)]},
     )
     interest_expenses_account_id = fields.Many2one(
         "account.account",
         string="Interests account",
         help="Account where the interests will be assigned to",
         domain="[('company_id', 'in', [current_company_id, False]), ('deprecated', '=', False)]",
+    )
+    method_period = fields.Integer(
+        string="Period Length",
+        default=1,
+        help="State here the time between 2 depreciations, in months",
+        required=True,
     )
