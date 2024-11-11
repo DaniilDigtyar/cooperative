@@ -42,5 +42,6 @@ class AccountLoanLine(models.Model):
                     "credit": tax_results["total_included"],
                 }
                 vals.append(balance_line)
-
-        return vals
+                return vals
+        else:
+            return super()._move_line_vals(account=account)
