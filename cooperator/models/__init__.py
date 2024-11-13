@@ -16,3 +16,4 @@ from . import res_partner
 from . import share_line
 from . import subscription_register
 from . import subscription_request
+from . import product_category

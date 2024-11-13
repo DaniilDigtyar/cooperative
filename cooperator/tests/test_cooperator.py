@@ -743,7 +743,6 @@ class CooperatorCase(TransactionCase, CooperatorTestMixin):
         self.validate_subscription_request_and_pay(subscription_request_2)
         partner_2 = subscription_request_2.partner_id
         self.assertEqual(partner_1, partner_2)
-        user = self.env["res.users"].search([("partner_id", "=", partner_1.id)])
         self.assertEqual(user.company_id, self.company)
         self.assertEqual(user.company_ids, self.company | company_2)
 
@@ -1584,3 +1583,43 @@ class CooperatorCase(TransactionCase, CooperatorTestMixin):
         self.assertEqual(inactive_user.company_ids, self.env.company)
         self.assertEqual(inactive_user.company_id, self.env.company)
         self.assertTrue(inactive_user.active)
+
+    def test_capital_release_request_income_account_new(self):
+        """
+        Test that the income account of capital release requests for new subscriptions
+        uses the standard income account.
+        """
+        self.subscription_request_1.validate_subscription_request()
+        invoice = self.subscription_request_1.capital_release_request
+        income_line = invoice.invoice_line_ids.filtered(lambda l: l.credit == 0)
+        self.assertEqual(
+            income_line.account_id,
+            self.share_y.property_account_income_id
+            or self.share_y.categ_id.property_account_income_categ_id,
+        )
+
+    def test_capital_release_request_income_account_increase(self):
+        """
+        Test that the income account of capital release requests for increase subscriptions
+        uses the increase income account.
+        """
+        self.subscription_request_1.validate_subscription_request()
+        self.pay_invoice(self.subscription_request_1.capital_release_request)
+
+        subscription_request_2 = self.create_dummy_subscription_from_partner(
+            self.subscription_request_1.partner_id
+        )
+
+        increase_account = self.env["account.account"].create(
+            {
+                "name": "Test Increase Income Account",
+                "code": "TINC",
+                "account_type": "income",
+            }
+        )
+
+        self.share_y.property_account_income_increase_id = increase_account.id
+        subscription_request_2.validate_subscription_request()
+        invoice = subscription_request_2.capital_release_request
+        income_line = invoice.invoice_line_ids.filtered(lambda l: l.credit == 0)
+        self.assertEqual(income_line.account_id, increase_account)

@@ -531,10 +531,20 @@ class SubscriptionRequest(models.Model):
         # request for a company other than the current one, which can happen
         # when a user is "logged in" to multiple companies.
         product = product.with_company(self.company_id)
-        account = (
-            product.property_account_income_id
-            or product.categ_id.property_account_income_categ_id
-        )
+
+        if self.type == 'increase':
+            account = (
+                product.property_account_income_increase_id
+                or product.categ_id.property_account_income_increase_categ_id
+                or product.property_account_income_id
+                or product.categ_id.property_account_income_categ_id
+            )
+        else:
+            account = (
+                product.property_account_income_id
+                or product.categ_id.property_account_income_categ_id
+            )
+
         if not account:
             raise UserError(
                 _(
