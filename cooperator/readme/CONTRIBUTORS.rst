@@ -8,7 +8,3 @@
   * Manuel Claeys Bouuaert
   * Carmen Bianca Bakker
   * hugues de keyzer
-
-* 'Som IT Cooperatiu SCCL'
-
-  * Nicolás Ramos

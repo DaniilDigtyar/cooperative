@@ -30,10 +30,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
                     <label for="display_on_website" />
                 </div>
             </xpath>
-            <xpath expr="//field[@name='property_account_income_id']" position="after">
-                <field name="property_account_income_increase_id"
-                       groups="account.group_account_readonly"/>
-            </xpath>
             <page name="general_information" position="after">
                 <page
                     string="Share Information"
@@ -184,4 +180,5 @@ SPDX-License-Identifier: AGPL-3.0-or-later
        </p>
      </field>
  </record> -->
+
 </odoo>

@@ -40,7 +40,6 @@
         "views/operation_request_view.xml",
         "views/account_move_views.xml",
         "views/product_view.xml",
-        "views/product_category_view.xml",
         "views/res_company_view.xml",
         "views/account_journal_views.xml",
         "views/cooperative_membership_view.xml",
