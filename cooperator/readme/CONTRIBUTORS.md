@@ -7,5 +7,5 @@
   - Manuel Claeys Bouuaert
   - Carmen Bianca Bakker
   - hugues de keyzer
-- 'Som IT Cooperatiu SCCL'
+- [Som IT Cooperatiu SCCL](https://somit.coop)
   - Nicolás Ramos
