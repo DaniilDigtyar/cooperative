@@ -138,11 +138,44 @@ class SubscriptionRequest(models.Model):
                         )
         return res
 
-    @api.model
-    def _adapt_create_vals_and_membership_from_partner(self, vals, partner):
-        res = super()._adapt_create_vals_and_membership_from_partner(vals, partner)
+    def _prepare_invoice_line(self, move_id, product, partner, qty):
+        self.ensure_one()
+        # Modificar la condición para incluir increase_remunerated
+        if self.type in ("increase", "increase_remunerated"):
+            product = product.with_company(self.company_id)
+            account = (
+                product.property_account_income_increase_id
+                or product.categ_id.property_account_income_increase_categ_id
+                or product.property_account_income_id
+                or product.categ_id.property_account_income_categ_id
+            )
+        else:
+            return super(SubscriptionRequest, self)._prepare_invoice_line(
+                move_id, product, partner, qty
+            )
 
-        if vals.get("type") == "increase_remunerated":
-            vals["type"] = "increase"
+        if not account:
+            raise UserError(
+                _(
+                    "Please define income account for this product:"
+                    ' "{name}" (id: {id}) - or for its category: "{category}".'
+                ).format(
+                    name=product.name, id=product.id, category=product.categ_id.name
+                )
+            )
 
-        return res
+        fpos = partner.with_company(self.company_id).property_account_position_id
+        if fpos:
+            account = fpos.map_account(account)
+
+        return {
+            "name": product.name,
+            "move_id": move_id,
+            "account_id": account.id,
+            "price_unit": product.lst_price,
+            "quantity": qty,
+            "product_uom_id": product.uom_id.id,
+            "product_id": product.id,
+            "company_id": self.company_id.id,
+        }
+
