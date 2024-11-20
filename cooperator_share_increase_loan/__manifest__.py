@@ -20,6 +20,7 @@
     "data": [
         "views/product_template_views.xml",
         "views/subscription_request_views.xml",
+        "views/account_loan_line_views.xml",
     ],
     "installable": True,
     "maintainers": ["nramosdev"],

@@ -154,16 +154,6 @@ class SubscriptionRequest(models.Model):
                 move_id, product, partner, qty
             )
 
-        if not account:
-            raise UserError(
-                _(
-                    "Please define income account for this product:"
-                    ' "{name}" (id: {id}) - or for its category: "{category}".'
-                ).format(
-                    name=product.name, id=product.id, category=product.categ_id.name
-                )
-            )
-
         fpos = partner.with_company(self.company_id).property_account_position_id
         if fpos:
             account = fpos.map_account(account)
@@ -178,4 +168,3 @@ class SubscriptionRequest(models.Model):
             "product_id": product.id,
             "company_id": self.company_id.id,
         }
-
