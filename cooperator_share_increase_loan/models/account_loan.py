@@ -18,3 +18,20 @@ class AccountLoan(models.Model):
         default=False,
         help="Indicates if this loan was created from a subscription request",
     )
+
+    def _generate_loan_entries(self, date):
+        """
+        Generate the moves of unfinished loans before date
+        :param date:
+        :return:
+        """
+        res = []
+        for record in self.search(
+            [("state", "=", "posted"), ("is_leasing", "=", False)]
+        ):
+            lines = record.line_ids.filtered(
+                lambda r: r.date <= date and not r.move_ids
+            )
+            lines = lines.with_context(use_custom_move_line_vals=True)
+            res += lines._generate_move()
+        return res

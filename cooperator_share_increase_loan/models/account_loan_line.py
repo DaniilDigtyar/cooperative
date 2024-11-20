@@ -1,4 +1,8 @@
-from odoo import models, Command, _
+from odoo import Command, _, api, fields, models
+from odoo.exceptions import UserError
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class AccountLoanLine(models.Model):
@@ -19,7 +23,7 @@ class AccountLoanLine(models.Model):
         self.ensure_one()
         vals = []
 
-        if self.env.context.get('use_custom_move_line_vals'):
+        if self.env.context.get("use_custom_move_line_vals"):
             if self.loan_id.loan_type == "interest" and self.loan_id.from_subscription:
                 interest_account = self.loan_id.interest_expenses_account_id
                 taxes = interest_account.tax_ids
@@ -43,7 +47,9 @@ class AccountLoanLine(models.Model):
                     }
                     vals.append(tax_values)
 
-                    partner = self.loan_id.partner_id.with_company(self.loan_id.company_id)
+                    partner = self.loan_id.partner_id.with_company(
+                        self.loan_id.company_id
+                    )
                     balance_line = {
                         "name": "Interest payment",
                         "amount_currency": -tax_results["total_included"],
@@ -55,5 +61,5 @@ class AccountLoanLine(models.Model):
                     }
                     vals.append(balance_line)
                     return vals
-        else:
-            return super()._move_line_vals(account=account)
+
+        return super()._move_line_vals(account=account)
